@@ -1,5 +1,6 @@
 package com.tutorial.demo.student;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +14,24 @@ import java.util.List;
 //@Component
 //but instead of simply saying Component, we can be much more specific
 //we can can use the @Service annotation to clearl denote that this is the Service layer
+
+
+
+/// we also want to use the StudentRepository interface here
 @Service
 public class StudentService {
-    public List<Student> getStudents(){
-        return List.of(
-                new Student(
-                        1L,
-                        "Mariam",
-                        "mariam.jamal@gmail.com",
-                        LocalDate.of(2000, Month.JANUARY,5),
-                        21
 
-                )
-        );
+    private final StudentRepository studentRepository;
+
+    //autowiring the private variable
+    @Autowired
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
+
+    public List<Student> getStudents(){
+        //we can actually use the JPA methods here
+        //in this case, the findAll method would return all the entries
+        return studentRepository.findAll();
     }
 }

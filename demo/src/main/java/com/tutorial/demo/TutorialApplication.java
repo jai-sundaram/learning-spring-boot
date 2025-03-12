@@ -65,5 +65,10 @@ public class TutorialApplication {
 
 	//now lets create a class called StudentService
 
+	//now we will be creating the DataAcess layer, calling it StudentRepo
+	//this will be an interface btw
+
+	//creating a class called StudentConfig
+
 
 }

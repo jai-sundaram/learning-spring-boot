@@ -1,36 +1,63 @@
 package com.tutorial.demo.student;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.Period;
+
+//to map this student to a database, use the @Entity component
+@Entity
+//also use the Table annotation
+@Table
 public class Student {
+    //here use the id annotation above the id field
+    //follow the steps below to complete mapping to the database
+
+    //the SequenceGenerator and the GeneratedValue thing work together to automatically generate unique primary keys without having to actually manually specify it in the code
+    @SequenceGenerator(
+            name = "student_sequence",
+            sequenceName = "student_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "student_sequence"
+    )
+    @Id
     private Long id;
     private String name;
     private String email;
     private LocalDate dob;
+    //this transient attributes basically indicates that this variable does not have to be a column in the database
+    @Transient
     private Integer age;
     ///creating three different constructors
     //generating constructor with no attributes
+
+
+    public Student() {
+    }
+
     public Student(Long id) {
         this.id = id;
     }
     //generating constructor with all attributes
 
-    public Student(Long id, String name, String email, LocalDate dob, Integer age) {
+    public Student(Long id, String name, String email, LocalDate dob) {
+
         this.id = id;
         this.name = name;
         this.email = email;
         this.dob = dob;
-        this.age = age;
     }
 
 
     //creating the final constructor with all attributes except id
 
-    public Student(String name, String email, LocalDate dob, Integer age) {
+    public Student(String name, String email, LocalDate dob) {
         this.name = name;
         this.email = email;
         this.dob = dob;
-        this.age = age;
     }
 
 
@@ -46,7 +73,9 @@ public class Student {
     }
 
     public Integer getAge() {
-        return age;
+        //calculating the age rather than setting it manually
+
+        return Period.between(this.dob, LocalDate.now()).getYears();
     }
 
     public LocalDate getDob() {
