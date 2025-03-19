@@ -1,5 +1,7 @@
 package com.tutorial.demo.student;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -28,9 +30,21 @@ import static org.junit.jupiter.api.Assertions.*;
 //add this line to the application.properties
 //spring.datasource.driver-class-name=org.h2.Driver
 
+//we are only testing the methods that we created with the custom jpql queries
+//we dont have to test the default methods
+
 class StudentRepositoryTest {
+
     @Autowired
     private StudentRepository underTest;
+
+
+
+    @AfterEach
+    void tearDown() {
+        //after each test, delete all the entries
+        underTest.deleteAll();
+    }
 
     @Test
     void itShouldCheckIfStudentEmailDoesExist () {
