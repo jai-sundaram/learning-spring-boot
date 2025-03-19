@@ -12,7 +12,8 @@ import java.time.Month;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-//we need to add the @DataJpaTest annotation to make sure that everything works properly 
+//we need to add the @DataJpaTest annotation to make sure that everything works properly
+//this annotation will wire up everthing, it wills start the application, it will get a datasource from the configuration, it will also help autowire things
 @DataJpaTest
 //to make sure that our testing is not conflicting with our actual Postgresql database, we will be using an in memory database
 //add the h2 dependency database
@@ -32,7 +33,7 @@ class StudentRepositoryTest {
     private StudentRepository underTest;
 
     @Test
-    void testFindStudentByEmail() {
+    void itShouldCheckIfStudentEmailDoesExist () {
         //given
         String email = "jamila@gmail.com";
         Student student = new Student(
@@ -43,5 +44,12 @@ class StudentRepositoryTest {
         underTest.save(student);
         boolean exists = underTest.findStudentByEmail("jamila@gmail.com").isPresent();
         assertThat(exists).isTrue();
+    }
+    @Test
+    void itShouldCheckIfStudentEmailDoesNotExist () {
+        //given
+        String email = "alex@gmail.com";
+        boolean exists = underTest.findStudentByEmail("jamila@gmail.com").isPresent();
+        assertThat(exists).isFalse();
     }
 }
