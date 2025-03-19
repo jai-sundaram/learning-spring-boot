@@ -28,7 +28,7 @@ class TutorialApplicationTests {
 		//import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 		//make sure that the package imported is the one above
 		//checking that the result should be equal to 40
-		assertThat(result).isEqualTo(40);
+		assertThat(result).isEqualTo(40 		 );
 
 	}
 	class Calculator{
