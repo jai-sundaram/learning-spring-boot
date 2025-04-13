@@ -1,0 +1,55 @@
+#provide the version of the Compile file format version
+#for now, i think u can just stick to 3.7
+version: "3.7"
+
+#in this project, we want to run both the application as well as the DB
+#this is part of services
+services:
+  #this app portion is meant for the actual spring boot app
+  app:
+    #want to build an image for the project
+      #we want to first build it
+      build: .
+      #remember the container port number is 8080, but our application port number is 8090
+      #we will expose port 8090 to the container port of 8080
+      ports:
+        #so again, the first one is the host port number
+        #the second one is the container port number
+        - "8090:8090"
+      networks:
+        - s-network
+  #now, let us focus on the actual postgres portion of it
+  postgres:
+    #first, we will mention the image for postgres
+    #will be using the latest version
+    image: postgres:latest
+    #now, we will actually set all the auth details/environment
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: student2
+    #now, we will be working with the ports
+    #exposing port 5433 on the host machine to the container port of 5432
+    ports:
+      - 5433:5432
+    #we need to mention what network this container will be on
+    networks:
+      - s-network
+    volumes:
+      #first specify which storage we are talking about
+      #after the :, we are specifying where exactly the data is located in the container
+      - postgres-s-data:/var/lib/postgresql/data
+
+
+#we need to make it so that both the containers are on the same network
+networks:
+  #this network name can be anything
+  s-network:
+    #we have to mention the driver
+    #by default, it will be bridge, and this will actually work
+    driver: bridge
+
+#to prevent losing data everytime we restart the container, we need to create a volume
+volumes:
+  #we are storing it in a docker storage called postgres-s-data
+  postgres-s-data:
